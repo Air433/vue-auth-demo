@@ -1,7 +1,5 @@
 <template>
-<!--<div style="background-image: url(/static/timg.jpg);background-repeat: no-repeat;">-->
   <div>
-  <!--<img src="/static/timg.jpg">-->
   <v-app  style="background-image: url(/static/timg.jpg);background-repeat: no-repeat;background-size:cover">
     <v-content>
       <v-container fluid fill-height>
@@ -87,32 +85,10 @@
                 if (error.data.code==408){
                   // alert("用户名或密码错误")
                   this.errorMsg = "用户名或密码错误";
-                  // if (!this.errorFlag){
-                  //   window.setInterval(() => {
-                  //     if (this.errorFlag){
-                  //       this.errorFlag = false;
-                  //     }
-                  //   },3000)
-                  // }
-
                   this.errorFlag = true;
-
                 }
               });
-            // this.axios.post("www.baidu.com", {'username':this.username, 'password': this.password})
-            //   .then(res =>{
-            //
-            //   })
-            // this.axios({
-            //   method: "POST",
-            //   url: `http://192.168.8.192:8080/auth_token`,
-            //   data: {'username':this.username, 'password': this.password},
-            //   headers: {
-            //     'Content-Type': 'application/json;charset=UTF-8'
-            //   }
-            // }).then(function(res) {
-            //   console.log(res);
-            // });
+
           }
         }
 

@@ -21,7 +21,10 @@ export default new Router({
     {
       path: '/',
       name: 'HelloWorld',
-      component: HelloWorld
+      component: HelloWorld,
+      children:[
+        route("/sys/role","/Role","Role")
+      ]
     }
   ]
 })
