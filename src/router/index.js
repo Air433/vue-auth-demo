@@ -22,8 +22,11 @@ export default new Router({
       path: '/',
       name: 'HelloWorld',
       component: HelloWorld,
+      // redirect:"/login",
       children:[
-        route("/sys/role","/Role","Role")
+        // {path:'/index', component:'HelloWorld',name:'HelloWorld'},
+        route("sys/role","/Role","Role"),
+        route("sys/menu","/Menu","Menu")
       ]
     }
   ]

@@ -39,7 +39,7 @@
             </v-list-tile-content>
           </v-list-tile>
           <!-- 二级菜单 -->
-          <v-list-tile v-for="subItem in item.list" :key="subItem.name" :to="subItem.url">
+          <v-list-tile v-for="subItem in item.list" :key="subItem.name" :to="'/'+subItem.url">
             <!--{{'../assets/icons/icon-'+ subItem.icon +'.svg'}}-->
             <v-list-tile-content>
               <v-list-tile-title>{{ subItem.name }}</v-list-tile-title>
