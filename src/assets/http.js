@@ -3,7 +3,7 @@ import Qs from 'qs'
 
 //创建axios实例
 var service = axios.create({
-  baseURL: 'http://192.168.0.108:9032/',
+  baseURL: 'http://192.168.13.1:9032/',
   timeout: 5000,
   headers: {
     'content-type': 'application/json;charset=UTF-8',
@@ -12,7 +12,7 @@ var service = axios.create({
 });
 
 var formService= axios.create({
-  baseURL: 'http://192.168.0.108:9032/',
+  baseURL: 'http://192.168.13.1:9032/',
   timeout: 5000,
   headers: {
     // 'Content-Type': 'application/x-www-form-urlencoded',
@@ -81,7 +81,7 @@ export default {
       service({
         method: 'get',
         url,
-        data:  param,
+        params:  param,
         // auth: {
         //   username: 'air_client',
         //   password: 'air_client'
