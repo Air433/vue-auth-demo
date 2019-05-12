@@ -187,7 +187,8 @@
           methods:{
            searchRole(){
              this.loading = true;
-             let req = {roleName: this.roleName,page:this.pagination.page, limit:this.pagination.rowsPerPage};
+             let req = {roleName: this.roleName,page:this.pagination.page, limit:this.pagination.rowsPerPage
+             , orderByColumn: this.pagination.sortBy,asc : !this.pagination.descending};
              this.http.get("/sys/role/list", req)
                .then(res=>{
                   this.roles = res.data.data.page.list;
