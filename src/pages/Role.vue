@@ -1,6 +1,5 @@
 <template xmlns:v-solt="http://www.w3.org/1999/XSL/Transform">
   <v-app>
-    <TestForm></TestForm>
     <v-card>
   <v-form v-model="valid">
     <v-container>
@@ -18,8 +17,45 @@
 
         <v-btn color="primary" @click="searchRole">搜索</v-btn>
         <v-btn color="success" @click="addRole">新增</v-btn>
-        <v-btn color="error">批量删除</v-btn>
+        <v-btn color="error" @click.stop="delDialog = true">批量删除</v-btn>
       </v-layout>
+
+      <v-dialog
+        v-model="delDialog"
+        max-width="290"
+      >
+        <v-card>
+          <v-card-title >确定要删除选中的角色吗?</v-card-title>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn
+              color="green darken-1"
+              flat="flat"
+              @click="delDialog = false"
+            >
+              取消
+            </v-btn>
+
+            <v-btn
+              color="red"
+              flat="flat"
+              @click.stop="delRole"
+            >
+              确定
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-alert
+        :value="displayAlert"
+        color="error"
+        icon="new_releases"
+      >
+       {{alertMsg}}
+      </v-alert>
 
       <!--弹出的对话框-->
       <v-dialog max-width="800" v-model="show" persistent scrollable>
@@ -33,7 +69,7 @@
           </v-toolbar>
           <!--对话框的内容，表单-->
           <v-card-text class="px-5" style="height:800px">
-            <role-form @close="closeWindow"  :isEdit="isEdit"></role-form>
+            <role-form @close="closeWindow" :searchRole="searchRole" :isEdit="isEdit"></role-form>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -41,18 +77,52 @@
     </v-container>
     <v-divider/>
     <v-data-table
+      v-model="selected"
       :headers="headers"
       :loading="loading"
       :items="roles"
-      :total-items="100"
+      :total-items="pagination.totalItems"
       :pagination.sync="pagination"
+      select-all
+      item-key="roleId"
       class="elevation-1"
     >
+      <template v-slot:headers="props" >
+        <tr>
+          <th>
+            <v-checkbox
+              :input-value="props.all"
+              :indeterminate="props.indeterminate"
+              primary
+              hide-details
+              @click.stop="toggleAll"
+            ></v-checkbox>
+          </th>
+          <th
+            v-for="header in props.headers"
+            :key="header.text"
+            :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+            @click="changeSort(header.value)"
+          >
+            <v-icon small>arrow_upward</v-icon>
+            {{ header.text }}
+          </th>
+        </tr>
+      </template>
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.roleId }}</td>
+        <tr :active="props.selected" @click="props.selected = !props.selected">
+          <td>
+            <v-checkbox
+              :input-value="props.selected"
+              primary
+              hide-details
+            ></v-checkbox>
+          </td>
+        <td class="text-xs-center">{{ props.item.roleId }}</td>
         <td class="text-xs-center">{{ props.item.roleName }}</td>
         <td class="text-xs-center">{{ props.item.remark }}</td>
         <td class="text-xs-center">{{ props.item.createTime }}</td>
+        </tr>
       </template>
 
     </v-data-table>
@@ -70,8 +140,13 @@
 
   export default {
         name: "Role",
+
     components: {RoleForm},
     data: () => ({
+      displayAlert: false,
+          alertMsg:"",
+          delDialog: false,
+          selected:[],
           pagination: {},
           valid: false,
           roleName: '',
@@ -116,7 +191,9 @@
              this.http.get("/sys/role/list", req)
                .then(res=>{
                   this.roles = res.data.data.page.list;
+                 this.pagination.totalItems = res.data.data.page.totalCount;
                });
+
              this.loading = false;
            }
            ,
@@ -126,7 +203,38 @@
           },
           closeWindow(){
             this.show = false;
-          }
+          },
+          toggleAll () {
+            if (this.selected.length) this.selected = [];
+            else this.selected = this.roles.slice()
+          },
+            changeSort (column) {
+              if (this.pagination.sortBy === column) {
+                this.pagination.descending = !this.pagination.descending
+              } else {
+                this.pagination.sortBy = column
+                this.pagination.descending = false
+              }
+            },
+            delRole(){
+               if (!this.selected || this.selected.length == 0){
+                  this.alertMsg = "没有选中任何角色";
+                   this.displayAlert  = true;
+                   this.delDialog = false;
+                   setTimeout(()=>{
+                     this.displayAlert = false;
+                   },3000);
+               }else{
+                 let roleIds = this.selected.map(x=> x.roleId);
+
+                 this.http.postJson('/sys/role/delete', roleIds);
+                 this.delDialog = false;
+                 this.searchRole();
+
+               }
+
+
+            }
         },
         computed: {
           pages () {
@@ -136,6 +244,17 @@
 
             return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
           }
+        },
+        watch:{
+          pagination:{
+            deep: true,
+            handler(){
+              this.searchRole();
+            }
+          }
+        },
+        created(){
+          this.searchRole();
         },
         compoents:{
           RoleForm

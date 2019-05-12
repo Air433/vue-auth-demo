@@ -40,7 +40,7 @@ var formService= axios.create({
 // )
 export default {
   //get请求，其他类型请求复制粘贴，修改method
-  postcc(url, param) {
+  postJson(url, param) {
     return new Promise((cback, reject) => {
 
       service({

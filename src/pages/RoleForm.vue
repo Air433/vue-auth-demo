@@ -45,7 +45,14 @@
 <script>
     export default {
       name: "role-form",
+      props:{
+        searchRole:{
+          type: Function,
+          default:null
+        }
+      },
       data: () => ({
+        breweries: [],
         roleName:'',
         remark:'',
         nameRules: [
@@ -150,12 +157,12 @@
       },
         methods: {
           saveRole(){
-            alert(this.roleName)
-            alert(this.remark)
-            alert(this.tree)
+            let req = {menuIdList:this.tree, remark:this.remark, roleName:this.roleName};
+            this.http.postJson('/sys/role/save', req);
+            this.searchRole();
           },
           fetch() {
-            if (this.breweries.length) return
+            if (this.breweries.length) return;
 
             return fetch('https://api.openbrewerydb.org/breweries')
               .then(res => res.json())
