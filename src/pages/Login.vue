@@ -82,7 +82,7 @@
                 this.$router.push("/");
               }, error=>{
                 console.log(error.data)
-                if (error.data.code==408){
+                if (error.data.status==408){
                   // alert("用户名或密码错误")
                   this.errorMsg = "用户名或密码错误";
                   this.errorFlag = true;

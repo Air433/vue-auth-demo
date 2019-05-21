@@ -228,12 +228,15 @@
                }else{
                  let roleIds = this.selected.map(x=> x.roleId);
 
-                 this.http.postJson('/sys/role/delete', roleIds);
+                 this.http.postJson('/sys/role/delete', roleIds)
+                   .then(res=>{
+                     if (res.data.status==200){
+                       this.searchRole();
+                     }
+                   });
                  this.delDialog = false;
-                 this.searchRole();
 
                }
-
 
             }
         },
