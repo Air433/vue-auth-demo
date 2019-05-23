@@ -161,11 +161,11 @@
             {
               text: 'ID',
               align: 'left',
-              value: 'roleId'
+              value: 'role_id'
             },
-            { text: '角色名称', align: 'center', value: 'roleName' },
+            { text: '角色名称', align: 'center', value: 'role_name' },
             { text: '备注', align: 'center', value: 'remark' },
-            { text: '创建时间', align: 'center', value: 'createTime' },
+            { text: '创建时间', align: 'center', value: 'create_time' },
             { text: '操作' }
           ],
           loading: false, // 是否在加载中
