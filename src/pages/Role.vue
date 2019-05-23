@@ -101,10 +101,10 @@
           <th
             v-for="header in props.headers"
             :key="header.text"
-            :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
-            @click="changeSort(header.value)"
+            :class="header.sortable?['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']:''"
+            @click="header.sortable?changeSort(header.value):''"
           >
-            <v-icon small>arrow_upward</v-icon>
+            <v-icon small v-if="header.sortable">arrow_upward</v-icon>
             {{ header.text }}
           </th>
         </tr>
@@ -161,12 +161,13 @@
             {
               text: 'ID',
               align: 'left',
-              value: 'role_id'
+              value: 'role_id',
+              sortable: true
             },
-            { text: '角色名称', align: 'center', value: 'role_name' },
-            { text: '备注', align: 'center', value: 'remark' },
-            { text: '创建时间', align: 'center', value: 'create_time' },
-            { text: '操作' }
+            { text: '角色名称', align: 'center', value: 'role_name', sortable: true },
+            { text: '备注', align: 'center', value: 'remark', sortable: false},
+            { text: '创建时间', align: 'center', value: 'create_time', sortable: true },
+            { text: '操作', sortable: false}
           ],
           loading: false, // 是否在加载中
           roles:[
@@ -213,7 +214,7 @@
               if (this.pagination.sortBy === column) {
                 this.pagination.descending = !this.pagination.descending
               } else {
-                this.pagination.sortBy = column
+                this.pagination.sortBy = column;
                 this.pagination.descending = false
               }
             },
