@@ -1,8 +1,7 @@
 <template>
   <v-app>
+
     <v-form
-      ref="form"
-      v-model="valid"
       lazy-validation
     >
       <v-text-field
@@ -49,7 +48,10 @@
         searchRole:{
           type: Function,
           default:null
-        }
+        },
+        updateRoleId: Number,
+        updateRoleName: String,
+        updateRoleRemark: String
       },
       data: () => ({
         breweries: [],
@@ -157,8 +159,14 @@
       },
         methods: {
           saveRole(){
-            let req = {menuIdList:this.tree, remark:this.remark, roleName:this.roleName};
-            this.http.postJson('/sys/role/save', req);
+            if (this.roleId){
+              let req = {menuIdList:this.tree, remark:this.remark, roleName:this.roleName, roleId:this.roleId};
+              this.http.postJson('/sys/role/update', req);
+            } else {
+              let req = {menuIdList:this.tree, remark:this.remark, roleName:this.roleName};
+              this.http.postJson('/sys/role/save', req);
+            }
+
             this.searchRole();
           },
           fetch() {
@@ -235,6 +243,27 @@
             });
             // 对象转数组并返回
             return Object.keys(tree).map(key => tree[key])
+          }
+        },
+        watch:{
+          updateRoleId: {
+            handler(){
+              if (this.updateRoleId) {
+                this.roleId = this.updateRoleId;
+                this.roleName = this.updateRoleName;
+                this.remark = this.updateRoleRemark;
+                this.http.get('/sys/role/info/'+ this.roleId)
+                  .then(res=>{
+                    let menuIds = res.data.data.role.menuIdList
+                    this.tree = menuIds;
+                  });
+              }else {
+                this.roleId = null;
+                this.roleName = '';
+                this.remark = '';
+              }
+
+            }
           }
         },
         created() {

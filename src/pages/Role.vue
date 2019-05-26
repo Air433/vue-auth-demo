@@ -69,7 +69,7 @@
           </v-toolbar>
           <!--对话框的内容，表单-->
           <v-card-text class="px-5" style="height:800px">
-            <role-form @close="closeWindow" :searchRole="searchRole" :isEdit="isEdit"></role-form>
+            <role-form @close="closeWindow" :searchRole="searchRole" :isEdit="isEdit" :roleId="updateRoleId" :updateRoleName="updateRoleName" :updateRoleRemark="updateRoleRemark" :updateRoleId="updateRoleId" ref="roleForm"></role-form>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -122,6 +122,7 @@
         <td class="text-xs-center">{{ props.item.roleName }}</td>
         <td class="text-xs-center">{{ props.item.remark }}</td>
         <td class="text-xs-center">{{ props.item.createTime }}</td>
+          <td class="text-xs-center"><v-btn color="cyan" @click="updateRole(props.item.roleId, props.item.roleName, props.item.remark)">更新</v-btn></td>
         </tr>
       </template>
 
@@ -143,7 +144,11 @@
 
     components: {RoleForm},
     data: () => ({
-      displayAlert: false,
+          updateRoleId: null,
+          updateRoleName: '',
+          updateRoleRemark: '',
+          updateRoleId: '',
+          displayAlert: false,
           alertMsg:"",
           delDialog: false,
           selected:[],
@@ -162,12 +167,13 @@
               text: 'ID',
               align: 'left',
               value: 'role_id',
-              sortable: true
-            },
-            { text: '角色名称', align: 'center', value: 'role_name', sortable: true },
-            { text: '备注', align: 'center', value: 'remark', sortable: false},
-            { text: '创建时间', align: 'center', value: 'create_time', sortable: true },
-            { text: '操作', sortable: false}
+              sortable: true,
+              width:'10px'
+             },
+            { text: '角色名称', align: 'center', value: 'role_name', sortable: true, width:'150px' },
+            { text: '备注', align: 'center', value: 'remark', sortable: false, width:'200px' },
+            { text: '创建时间', align: 'center', value: 'create_time', sortable: true , width:'50px' },
+            { text: '操作', sortable: false, width:'10px' }
           ],
           loading: false, // 是否在加载中
           roles:[
@@ -205,6 +211,7 @@
           },
           closeWindow(){
             this.show = false;
+            this.updateRoleId = null;
           },
           toggleAll () {
             if (this.selected.length) this.selected = [];
@@ -239,6 +246,14 @@
 
                }
 
+            },
+            updateRole(roleId, roleName, remark){
+              this.updateRoleName = roleName;
+              this.updateRoleRemark = remark;
+              this.updateRoleId = roleId;
+              this.isEdit = true;
+              this.show = true;
+              // this.$refs.roleForm.loadRole();
             }
         },
         computed: {

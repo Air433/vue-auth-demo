@@ -68,7 +68,7 @@ export default {
           //Message是element库的组件，可以去掉
 
         } else {
-          reject(err.response);
+          // reject(err.response);
           console.log(err.response, '异常2')
         }
       })
@@ -103,7 +103,7 @@ export default {
           //Message是element库的组件，可以去掉
 
         } else {
-          reject(err.response);
+          // reject(err.response);
           console.log(err.response, '异常2')
         }
       })
