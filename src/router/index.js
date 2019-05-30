@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 
-Vue.use(Router)
+Vue.use(Router);
 
 function route (path, file, name, children) {
   return {
@@ -26,7 +26,8 @@ export default new Router({
       children:[
         // {path:'/index', component:'HelloWorld',name:'HelloWorld'},
         route("sys/role","/Role","Role"),
-        route("sys/menu","/Menu","Menu")
+        route("sys/menu","/Menu","Menu"),
+        route("sys/user","/User","User")
       ]
     }
   ]

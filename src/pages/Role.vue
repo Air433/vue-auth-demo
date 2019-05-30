@@ -273,9 +273,6 @@
             }
           }
         },
-        created(){
-          this.searchRole();
-        },
         compoents:{
           RoleForm
         }
