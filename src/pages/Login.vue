@@ -50,6 +50,8 @@
 </template>
 
 <script>
+
+  import UserForm from './UserForm'
     export default {
         name: "Login",
         data () {

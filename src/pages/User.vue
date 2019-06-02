@@ -21,14 +21,14 @@
           <v-card>
             <!--对话框的标题-->
             <v-toolbar dense dark color="primary">
-              <v-toolbar-title>{{isEdit ? '修改' : '新增'}}角色</v-toolbar-title>
+              <v-toolbar-title>{{isEdit ? '修改' : '新增'}}用户</v-toolbar-title>
               <v-spacer/>
               <!--关闭窗口的按钮-->
               <v-btn icon @click="closeWindow"><v-icon>close</v-icon></v-btn>
             </v-toolbar>
             <!--对话框的内容，表单-->
             <v-card-text class="px-5" style="height:800px">
-              <user-form @close="closeWindow" :searchRole="searchRole" :isEdit="isEdit" :roleId="updateRoleId" :updateRoleName="updateRoleName" :updateRoleRemark="updateRoleRemark" :updateRoleId="updateRoleId" ref="roleForm"></user-form>
+              <user-form @close="closeWindow" :searchRole="searchRole" :isEdit="isEdit" :show="show"></user-form>
             </v-card-text>
           </v-card>
         </v-dialog>
@@ -82,7 +82,7 @@
             <td class="text-xs-center">{{ props.item.mobile }}</td>
             <td class="text-xs-center">{{ props.item.status }}</td>
             <td class="text-xs-center">{{ props.item.createTime }}</td>
-            <td class="text-xs-center"><v-btn color="cyan" @click="updateRole(props.item.roleId, props.item.roleName, props.item.remark)">更新</v-btn></td>
+            <td class="text-xs-center"><v-btn color="cyan" style="color: white" @click="updateRole(props.item.roleId, props.item.roleName, props.item.remark)">更新</v-btn></td>
           </tr>
         </template>
 
@@ -97,6 +97,7 @@
 
   export default {
     name: "User",
+    components: {UserForm},
     data: () => ({
       username: '',
       loading: false,
