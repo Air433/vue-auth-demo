@@ -3,6 +3,7 @@
     <v-form
       v-model="valid"
       lazy-validation
+      ref="form"
     >
       <v-text-field
         v-model="username"
@@ -42,7 +43,7 @@
       ></v-text-field>
 
       <v-text-field
-        v-model="phone"
+        v-model="mobile"
         :counter="11"
         :rules="phoneRules"
         label="手机号"
@@ -53,14 +54,6 @@
 
       <v-container fluid>
         <v-layout row wrap>
-          <v-flex xs12 sm4 md4>
-            <v-checkbox v-model="selected" label="John" value="sdf"></v-checkbox>
-            <v-checkbox v-model="selected" label="Jacob" value="xcvfs"></v-checkbox>
-            <v-checkbox v-model="selected" label="Jacob" value="dsdfsdf"></v-checkbox>
-          </v-flex>
-          <v-flex xs12 sm4 md4>
-            <v-checkbox v-model="selected" label="John" value="Johnwer3c"></v-checkbox>
-          </v-flex>
           <v-flex xs12 sm4 md4 v-for="item in roles">
             <v-checkbox v-model="selected" :label="item.roleName" :value="item"></v-checkbox>
           </v-flex>
@@ -74,7 +67,7 @@
       <v-btn
         :disabled="!valid"
         color="success"
-        @click="validate"
+        @click="saveUser"
       >
         保存
       </v-btn>
@@ -97,7 +90,7 @@
       e1: false,
       valid: true,
       repectPassword: '',
-      phone: '',
+      mobile: '',
       enable: true,
       roles: [],
       selected: [],
@@ -109,14 +102,29 @@
       passwordRules: [
         v => !!v || '密码不能为空'
       ],
+      repectPassword: [
+        v => !!v || '确认密码不能为空',
+        v => v==this.password || '两次输入密码不一样'
+      ],
       emailRules: [
         v => !!v || '邮箱不能为空',
         v => /.+@.+/.test(v) || '邮箱格式不对'
       ],
       phoneRules: [
-        v => !!v.replace(/[^0-9]+/g, '') || '手机号必须是数字'
+        v => v.replace(/[^0-9]+/g, '').length==v.length || '手机号必须是数字'
       ]
     }),
+    methods: {
+      saveUser(){
+        if (this.$refs.form.validate()) {
+          this.snackbar = true
+        }
+        let roleIds = this.selected.map(x => x.roleId);
+        let params = {username: this.username, status: this.enable?1:0, password: this.password,
+        mobile: this.mobile, email: this.email, roleIdList: roleIds};
+        this.http.postJson('/sys/user/save', params);
+      }
+    },
     watch: {
       show: {
         handler() {
@@ -124,8 +132,10 @@
             this.http.get('/sys/role/select')
               .then(res => {
                 this.roles = res.data.data.list;
-                console.log(this.roles)
               })
+          }else {
+            this.roles = [];
+            this.selected = [];
           }
         }
       }
