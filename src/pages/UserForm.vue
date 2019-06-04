@@ -122,7 +122,12 @@
         let roleIds = this.selected.map(x => x.roleId);
         let params = {username: this.username, status: this.enable?1:0, password: this.password,
         mobile: this.mobile, email: this.email, roleIdList: roleIds};
-        this.http.postJson('/sys/user/save', params);
+        this.http.postJson('/sys/user/save', params)
+          .then(res=>{
+            if (res.data.status == 200){
+              this.$message.success("保存成功");
+            }
+          });
       }
     },
     watch: {

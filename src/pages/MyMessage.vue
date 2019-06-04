@@ -1,9 +1,9 @@
 <template>
   <v-alert
     :value="visable"
-    color="error" transition="scale-transition"
-  class="message">
-    {{alertMessage}}
+    :color="color" transition="scale-transition"
+    class="message">
+    {{text}}
   </v-alert>
 </template>
 
@@ -11,19 +11,17 @@
     export default {
         name: "MyMessage",
         props: {
+          color: {
+            type: String,
+            default: 'success'
+          },
           visable: {
             type: Boolean,
             default: false
           },
-          alertMessage: {
+          text: {
             type: String,
             default: ''
-          }
-        },
-        data(){
-          return{
-            visable: false,
-            alertMessage:''
           }
         }
     }
@@ -37,5 +35,6 @@
     left: 50%;
     transform: translateX(-50%);
     min-width: 400px;
+    z-index: 1000;
   }
 </style>

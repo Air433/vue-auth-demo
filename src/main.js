@@ -9,6 +9,8 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import http from './assets/http.js'
 import Qs from 'qs'
+import vMessage from './assets/MyMessage'
+Vue.use(vMessage);
 
 Vue.prototype.http = http
 
