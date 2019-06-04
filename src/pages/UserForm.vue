@@ -126,6 +126,8 @@
           .then(res=>{
             if (res.data.status == 200){
               this.$message.success("保存成功");
+            }else{
+              this.$message.error("保存失败");
             }
           });
       }

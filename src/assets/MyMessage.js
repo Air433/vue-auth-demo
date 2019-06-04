@@ -23,7 +23,7 @@ const MESSAGE = {
       let VueMessage = Vue.extend({
         render(h){
           let props = {
-            type: type,
+            color: type,
             text: msg,
             visable: this.visable
           }
@@ -39,7 +39,7 @@ const MESSAGE = {
       let vm = newMessage.$mount()
       let el = vm.$el
       document.body.appendChild(el)
-      vm.visable = true
+      vm.visable = true;
       let t1 = setTimeout(() => {
         clearTimeout(t1);
         vm.visable = false;

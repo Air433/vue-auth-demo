@@ -15,6 +15,34 @@
           <v-btn color="error" @click.stop="delDialog = true">批量删除</v-btn>
         </v-layout>
 
+        <v-dialog
+          v-model="delDialog"
+          max-width="290"
+        >
+          <v-card>
+            <v-card-title>确定要删除选中的角色吗?</v-card-title>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+
+              <v-btn
+                color="green darken-1"
+                flat="flat"
+                @click="delDialog = false"
+              >
+                取消
+              </v-btn>
+
+              <v-btn
+                color="red"
+                flat="flat"
+                @click.stop="delUser"
+              >
+                确定
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
 
         <!--弹出的对话框-->
         <v-dialog max-width="800" v-model="show" persistent scrollable>
@@ -104,6 +132,7 @@
       pagination: {},
       show: false,
       isEdit:false,
+      delDialog: false,
       headers: [ {
         text: 'ID',
         align: 'left',
@@ -139,7 +168,8 @@
       searchUser() {
         this.loading = true;
         let req = {username: this.username,page:this.pagination.page,
-          limit:this.pagination.rowsPerPage};
+          limit:this.pagination.rowsPerPage, orderByColumn: this.pagination.sortBy,
+          asc: !this.pagination.descending};
 
         this.http.get("/sys/user/list", req)
           .then(res=>{
@@ -156,7 +186,7 @@
       },
       toggleAll () {
         if (this.selected.length) this.selected = [];
-        else this.selected = this.roles.slice()
+        else this.selected = this.users.slice()
       },
       changeSort (column) {
         if (this.pagination.sortBy === column) {
@@ -170,6 +200,11 @@
         this.show = false;
         this.updateRoleId = null;
       },
+      delUser(){
+       if (!this.selected || this.selected.length == 0){
+         this.$message.error('没有选中任何用户');
+       }
+      }
     },
     watch: {
       pagination: {
