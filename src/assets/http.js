@@ -109,6 +109,41 @@ export default {
       })
 
     })
+  },
+  delete(url, param) {
+    return new Promise((cback, reject) => {
+
+      service({
+        method: 'DELETE',
+        url,
+        data:  param,
+        // auth: {
+        //   username: 'air_client',
+        //   password: 'air_client'
+        // },
+        headers: {
+          "Authorization": 'Bearer '+(JSON.parse(localStorage.getItem('auth'))).access_token
+        }
+      }).then(res => {
+        //axios返回的是一个promise对象
+        var res_code = res.status.toString();
+        if (res_code.charAt(0) == 2) {
+          cback(res);   //cback在promise执行器内部
+        } else {
+          console.log(res, '异常1')
+        }
+      }).catch(err => {
+        if (!err.response) {
+          console.log('请求错误')
+          //Message是element库的组件，可以去掉
+
+        } else {
+          // reject(err.response);
+          console.log(err.response, '异常2')
+        }
+      })
+
+    })
   }
   ,postk(url, params) {
     return new Promise((resolve, reject) => {

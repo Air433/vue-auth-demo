@@ -81,6 +81,10 @@
   export default {
     name: "user-form",
     props: {
+      searchUser: {
+        type: Function,
+        default: null
+      },
       show: Boolean
     },
     data: () => ({
@@ -126,6 +130,7 @@
           .then(res=>{
             if (res.data.status == 200){
               this.$message.success("保存成功");
+              this.searchUser();
             }else{
               this.$message.error("保存失败");
             }

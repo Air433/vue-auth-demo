@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <v-app :dark="dark">
 
     <v-navigation-drawer
       :dark="dark"
@@ -103,7 +103,7 @@
         <router-view/>
       </div>
     </v-content>
-  </div>
+    </v-app>
 </template>
 
 <script>

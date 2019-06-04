@@ -127,7 +127,7 @@
               <td class="text-xs-center">{{ props.item.remark }}</td>
               <td class="text-xs-center">{{ props.item.createTime }}</td>
               <td class="text-xs-center">
-                <v-btn color="cyan" style="color: white" @click="updateRole(props.item.roleId, props.item.roleName, props.item.remark)">更新
+                <v-btn color="cyan" style="color: white" @click.stop="updateRole(props.item.roleId, props.item.roleName, props.item.remark)">更新
                 </v-btn>
               </td>
             </tr>

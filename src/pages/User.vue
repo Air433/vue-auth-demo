@@ -56,7 +56,7 @@
             </v-toolbar>
             <!--对话框的内容，表单-->
             <v-card-text class="px-5" style="height:800px">
-              <user-form @close="closeWindow" :searchRole="searchRole" :isEdit="isEdit" :show="show"></user-form>
+              <user-form @close="closeWindow" :searchUser="searchUser" :isEdit="isEdit" :show="show"></user-form>
             </v-card-text>
           </v-card>
         </v-dialog>
@@ -110,7 +110,7 @@
             <td class="text-xs-center">{{ props.item.mobile }}</td>
             <td class="text-xs-center">{{ props.item.status }}</td>
             <td class="text-xs-center">{{ props.item.createTime }}</td>
-            <td class="text-xs-center"><v-btn color="cyan" style="color: white" @click="updateRole(props.item.roleId, props.item.roleName, props.item.remark)">更新</v-btn></td>
+            <td class="text-xs-center"><v-btn color="cyan" style="color: white" @click.stop="updateRole(props.item.roleId, props.item.roleName, props.item.remark)">更新</v-btn></td>
           </tr>
         </template>
 
@@ -140,7 +140,7 @@
         sortable: true,
         width:'10px'
       },
-        { text: '用户名', align: 'center', value: 'user_name', sortable: true, width:'150px' },
+        { text: '用户名', align: 'center', value: 'username', sortable: true, width:'150px' },
         { text: '邮箱', align: 'center', value: 'email', sortable: false, width:'200px' },
         { text: '手机号', align: 'center', value: 'mobile', sortable: true , width:'50px' },
         { text: '状态', align: 'center', value: 'status', sortable: true , width:'50px' },
@@ -203,6 +203,19 @@
       delUser(){
        if (!this.selected || this.selected.length == 0){
          this.$message.error('没有选中任何用户');
+       }else {
+         let userIds = this.selected.map(x=> x.userId);
+         this.http.delete('/sys/user/delete', userIds)
+           .then(res=>{
+             if (res.data.status == 200){
+               this.$message.success("删除成功");
+               this.searchUser();
+             }else {
+               this.$message.error("删除失败");
+             }
+           });
+
+         this.delDialog = false;
        }
       }
     },
