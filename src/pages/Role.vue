@@ -201,14 +201,15 @@
     methods: {
       searchRole() {
         this.loading = true;
+
         let req = {
           roleName: this.roleName, page: this.pagination.page, limit: this.pagination.rowsPerPage
-          , orderByColumn: this.pagination.sortBy, asc: !this.pagination.descending
+          , orderField: this.pagination.sortBy, order: this.pagination.descending?'DESC':'ASC'
         };
         this.http.get("/sys/role/list", req)
           .then(res => {
-            this.roles = res.data.data.page.list;
-            this.pagination.totalItems = res.data.data.page.totalCount;
+            this.roles = res.data.data.list;
+            this.pagination.totalItems = res.data.data.totalCount;
           });
 
         this.loading = false;
@@ -245,7 +246,7 @@
         } else {
           let roleIds = this.selected.map(x => x.roleId);
 
-          this.http.postJson('/sys/role/delete', roleIds)
+          this.http.delete('/sys/role/delete', roleIds)
             .then(res => {
               if (res.data.status == 200) {
                 this.searchRole();

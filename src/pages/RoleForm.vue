@@ -161,13 +161,23 @@
           saveRole(){
             if (this.roleId){
               let req = {menuIdList:this.tree, remark:this.remark, roleName:this.roleName, roleId:this.roleId};
-              this.http.postJson('/sys/role/update', req);
+              this.http.put('/sys/role/update', req)
+                .then(res=>{
+                  if (res.data.status == 200){
+                    this.searchRole();
+                  }
+                });
             } else {
               let req = {menuIdList:this.tree, remark:this.remark, roleName:this.roleName};
-              this.http.postJson('/sys/role/save', req);
+              this.http.postJson('/sys/role/save', req)
+                .then(res=>{
+                  if (res.data.status == 200){
+                    this.searchRole();
+                  }
+                });
             }
 
-            this.searchRole();
+
           },
           fetch() {
             if (this.breweries.length) return;
@@ -254,7 +264,7 @@
                 this.remark = this.updateRoleRemark;
                 this.http.get('/sys/role/info/'+ this.roleId)
                   .then(res=>{
-                    let menuIds = res.data.data.role.menuIdList
+                    let menuIds = res.data.data.role.menuIdList;
                     this.tree = menuIds;
                   });
               }else {

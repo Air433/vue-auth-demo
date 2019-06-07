@@ -167,14 +167,15 @@
     methods: {
       searchUser() {
         this.loading = true;
+
         let req = {username: this.username,page:this.pagination.page,
-          limit:this.pagination.rowsPerPage, orderByColumn: this.pagination.sortBy,
-          asc: !this.pagination.descending};
+          limit:this.pagination.rowsPerPage,
+          orderField: this.pagination.sortBy, order: this.pagination.descending?'DESC':'ASC'}
 
         this.http.get("/sys/user/list", req)
           .then(res=>{
-            this.users = res.data.data.page.list;
-            this.pagination.totalItems = res.data.data.page.totalCount;
+            this.users = res.data.data.list;
+            this.pagination.totalItems = res.data.data.totalCount;
           });
 
         this.loading = false;
