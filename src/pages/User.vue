@@ -61,6 +61,23 @@
           </v-card>
         </v-dialog>
 
+        <!--弹出的对话框-->
+        <v-dialog max-width="800" v-model="updateShow" persistent scrollable>
+          <v-card>
+            <!--对话框的标题-->
+            <v-toolbar dense dark color="primary">
+              <v-toolbar-title>修改用户</v-toolbar-title>
+              <v-spacer/>
+              <!--关闭窗口的按钮-->
+              <v-btn icon @click="closeWindow"><v-icon>close</v-icon></v-btn>
+            </v-toolbar>
+            <!--对话框的内容，表单-->
+            <v-card-text class="px-5" style="height:800px">
+              <update-user-form @close="closeWindow" :searchUser="searchUser" :isEdit="isEdit" :user="user"></update-user-form>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+
       </v-container>
       <v-divider/>
       <v-data-table
@@ -110,7 +127,7 @@
             <td class="text-xs-center">{{ props.item.mobile }}</td>
             <td class="text-xs-center">{{ props.item.status }}</td>
             <td class="text-xs-center">{{ props.item.createTime }}</td>
-            <td class="text-xs-center"><v-btn color="cyan" style="color: white" @click.stop="updateRole(props.item.roleId, props.item.roleName, props.item.remark)">更新</v-btn></td>
+            <td class="text-xs-center"><v-btn color="cyan" style="color: white" @click.stop="displayUpdateUser(props.item)">更新</v-btn></td>
           </tr>
         </template>
 
@@ -122,17 +139,20 @@
 <script>
 
   import UserForm from './UserForm'
+  import UpdateUserForm from './UpdateUserForm'
 
   export default {
     name: "User",
-    components: {UserForm},
+    components: {UserForm, UpdateUserForm},
     data: () => ({
       username: '',
       loading: false,
       pagination: {},
       show: false,
+      updateShow: false,
       isEdit:false,
       delDialog: false,
+      user: {},
       headers: [ {
         text: 'ID',
         align: 'left',
@@ -198,6 +218,7 @@
         }
       },
       closeWindow(){
+        this.updateShow = false;
         this.show = false;
         this.updateRoleId = null;
       },
@@ -218,6 +239,10 @@
 
          this.delDialog = false;
        }
+      },
+      displayUpdateUser(user){
+        this.user = user;
+        this.updateShow = true;
       }
     },
     watch: {

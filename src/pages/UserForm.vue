@@ -143,7 +143,7 @@
           if (this.show) {
             this.http.get('/sys/role/select')
               .then(res => {
-                this.roles = res.data.data.list;
+                this.roles = res.data.data;
               })
           }else {
             this.roles = [];

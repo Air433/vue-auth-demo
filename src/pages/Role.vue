@@ -154,7 +154,7 @@
       updateRoleId: null,
       updateRoleName: '',
       updateRoleRemark: '',
-      updateRoleId: '',
+      updateRoleId: null,
       displayAlert: false,
       alertMsg: "",
       delDialog: false,
@@ -249,7 +249,10 @@
           this.http.delete('/sys/role/delete', roleIds)
             .then(res => {
               if (res.data.status == 200) {
+                this.$message.success("删除成功");
                 this.searchRole();
+              } else {
+                this.$message.error("删除失败");
               }
             });
           this.delDialog = false;

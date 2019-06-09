@@ -1,5 +1,7 @@
 import axios from 'axios'
 import Qs from 'qs'
+import {MESSAGE} from './MyMessage'
+import router from '../router/index.js'
 
 //创建axios实例
 var service = axios.create({
@@ -10,6 +12,24 @@ var service = axios.create({
     // "Authorization": 'Bearer '+(localStorage.getItem('auth')).access_token
   }
 });
+
+service.interceptors.response.use(
+  response => {
+    // window.location.href = '/#/login';
+
+    // MESSAGE.$message.success("token无效，请重新登陆");
+    //   vMessage.$message.info("token无效，请重新登陆");
+    if (response.data.status == 401) {
+
+      setTimeout(()=>{
+        router.push("/login");
+      }, 3000);
+
+      return Promise.resolve(response);
+    }
+    return response;
+   }
+)
 
 var formService= axios.create({
   baseURL: 'http://localhost:9032/',
@@ -99,7 +119,8 @@ export default {
         }
       }).catch(err => {
         if (!err.response) {
-          console.log('请求错误')
+          console.log('请求错误');
+          console.log(err.message)
           //Message是element库的组件，可以去掉
 
         } else {

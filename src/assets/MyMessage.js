@@ -1,6 +1,7 @@
 import MyMessage from '../pages/MyMessage'
 
-const MESSAGE = {
+const
+  MESSAGE = {
   duration: 3000,
   animateTime: 300,
   install(Vue){

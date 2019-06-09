@@ -27,7 +27,8 @@ export default new Router({
         // {path:'/index', component:'HelloWorld',name:'HelloWorld'},
         route("sys/role","/Role","Role"),
         route("sys/menu","/Menu","Menu"),
-        route("sys/user","/User","User")
+        route("sys/user","/User","User"),
+        route("job/schedule","/JobSchedule","JobSchedule")
       ]
     }
   ]

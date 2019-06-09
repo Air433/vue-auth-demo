@@ -262,25 +262,24 @@
                 this.roleId = this.updateRoleId;
                 this.roleName = this.updateRoleName;
                 this.remark = this.updateRoleRemark;
+                this.http.get("/sys/menu/list")
+                  .then(res=>{
+                    this.items = this.buildMenuTree(res.data);
+                  });
                 this.http.get('/sys/role/info/'+ this.roleId)
                   .then(res=>{
-                    let menuIds = res.data.data.role.menuIdList;
+                    let menuIds = res.data.data.menuIdList;
                     this.tree = menuIds;
                   });
               }else {
                 this.roleId = null;
                 this.roleName = '';
+
                 this.remark = '';
               }
 
             }
           }
-        },
-        created() {
-          this.http.get("/sys/menu/list")
-            .then(res=>{
-              this.items = this.buildMenuTree(res.data);
-            });
         }
 
     }
