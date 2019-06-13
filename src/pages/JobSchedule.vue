@@ -1,21 +1,46 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <v-app>
-    <v-select
-      v-model="value"
-      :items="items"
-      label="Select Item"
-      multiple
-    >
-      <template v-slot:selection="{ item, index }">
-        <v-chip v-if="index === 0">
-          <span>{{ item }}</span>
-        </v-chip>
-        <span
-          v-if="index === 1"
-          class="grey--text caption"
-        >(+{{ value.length - 1 }} others)</span>
-      </template>
-    </v-select>
+    <v-container fluid>
+      <v-layout row wrap align-center>
+        <v-flex xs12 sm6>
+          <v-subheader v-text="'Multiple with persistent hint'"></v-subheader>
+        </v-flex>
+        <v-flex xs12 sm6>
+          <v-select
+            v-model="e6"
+            :items="states"
+            :menu-props="{ maxHeight: '400' }"
+            label="Select"
+            multiple
+            hint="Pick your favorite states"
+            persistent-hint
+          ></v-select>
+        </v-flex>
+
+        <v-flex xs12 sm6>
+          <v-subheader v-text="'Multiple (Chips) with persistent hint'"></v-subheader>
+        </v-flex>
+
+        <v-flex xs12 sm6>
+          <v-select
+            v-model="e7"
+            :items="states"
+            label="Select"
+            multiple
+            chips
+            hint="What are the target regions"
+            persistent-hint
+          >
+            <template v-slot:selection="{ item, index }">
+              <v-chip>
+                <span>{{ item }}-----</span>
+              </v-chip>
+            </template>
+
+          </v-select>
+        </v-flex>
+      </v-layout>
+    </v-container>
 
   </v-app>
 </template>
@@ -24,8 +49,23 @@
   export default {
     name: "JobSchedule",
     data: () => ({
-      items: ['foo', 'bar', 'fizz', 'buzz', 'fizzbuzz', 'foobar'],
-      value: ['foo', 'bar', 'fizz']
+      e6: [],
+      e7: [],
+      states: [
+        'Alabama', 'Alaska', 'American Samoa', 'Arizona',
+        'Arkansas', 'California', 'Colorado', 'Connecticut',
+        'Delaware', 'District of Columbia', 'Federated States of Micronesia',
+        'Florida', 'Georgia', 'Guam', 'Hawaii', 'Idaho',
+        'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky',
+        'Louisiana', 'Maine', 'Marshall Islands', 'Maryland',
+        'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi',
+        'Missouri', 'Montana', 'Nebraska', 'Nevada',
+        'New Hampshire', 'New Jersey', 'New Mexico', 'New York',
+        'North Carolina', 'North Dakota', 'Northern Mariana Islands', 'Ohio',
+        'Oklahoma', 'Oregon', 'Palau', 'Pennsylvania', 'Puerto Rico',
+        'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee',
+        'Texas', 'Utah', 'Vermont', 'Virgin Island', 'Virginia',
+        'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']
     })
   }
 </script>
