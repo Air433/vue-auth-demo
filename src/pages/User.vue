@@ -56,7 +56,7 @@
             </v-toolbar>
             <!--对话框的内容，表单-->
             <v-card-text class="px-5" style="height:800px">
-              <user-form @close="closeWindow" :searchUser="searchUser" :isEdit="isEdit" :show="show"></user-form>
+              <user-form :closeWindow="closeWindow" :searchUser="searchUser" :isEdit="isEdit" :show="show"></user-form>
             </v-card-text>
           </v-card>
         </v-dialog>
