@@ -73,7 +73,7 @@
               <v-card-text class="px-5" style="height:800px">
                 <role-form @close="closeWindow" :searchRole="searchRole" :isEdit="isEdit" :roleId="updateRoleId"
                            :updateRoleName="updateRoleName" :updateRoleRemark="updateRoleRemark"
-                           :updateRoleId="updateRoleId" ref="roleForm"></role-form>
+                           :updateRoleId="updateRoleId" :show="show" ref="roleForm"></role-form>
               </v-card-text>
             </v-card>
           </v-dialog>
@@ -216,6 +216,7 @@
       }
       ,
       addRole() {
+        this.updateRoleId = null;
         this.show = true;
         this.isEdit = false
       },

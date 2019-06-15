@@ -85,6 +85,10 @@
         type: Function,
         default: null
       },
+      closeWindow: {
+        type: Function,
+        default: null
+      },
       user: {
         type: Object
       }
@@ -106,7 +110,10 @@
           .then(res=>{
               if (res.data.status == 200){
                 this.$message.success("修改成功");
-                this.searchUser()
+                this.searchUser();
+                setTimeout(()=>{
+                  this.closeWindow();
+                }, 1000)
               }
           })
       }

@@ -11,6 +11,9 @@ import http from './assets/http.js'
 import Qs from 'qs'
 import vMessage from './assets/MyMessage'
 Vue.use(vMessage);
+import globalUtil from './components/Common'
+Vue.prototype.$Util = globalUtil;
+
 
 Vue.prototype.http = http
 

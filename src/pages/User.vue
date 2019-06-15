@@ -73,7 +73,7 @@
             </v-toolbar>
             <!--对话框的内容，表单-->
             <v-card-text class="px-5" style="height:800px">
-              <update-user-form @close="closeWindow" :searchUser="searchUser" :isEdit="isEdit" :user="user"></update-user-form>
+              <update-user-form :closeWindow="closeWindow" :searchUser="searchUser" :isEdit="isEdit" :user="user"></update-user-form>
             </v-card-text>
           </v-card>
         </v-dialog>
@@ -132,6 +132,12 @@
         </template>
 
       </v-data-table>
+      <div class="text-xs-center pt-2">
+        <v-pagination v-model="pagination.page"
+                      :length="pages"
+                      circle
+        ></v-pagination>
+      </div>
     </v-card>
   </v-app>
 </template>
@@ -184,6 +190,15 @@
           createTime:'2019-5-6'
         }]
     }),
+    computed: {
+      pages() {
+        if (this.pagination.rowsPerPage == null ||
+          this.pagination.totalItems == null
+        ) return 0;
+
+        return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
+      }
+    },
     methods: {
       searchUser() {
         this.loading = true;
