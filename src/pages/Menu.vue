@@ -2,13 +2,22 @@
   <v-app>
     <v-layout row wrap>
     <v-flex xs6>
-      <v-card  color="success">
-        <v-card-text class="px-0">6</v-card-text>
+      <v-card >
+        <v-card-text class="px-0">
+          <v-treeview
+            :items="treeItems"
+            activatable
+            :active.sync="menuId"
+          >
+          </v-treeview>
+        </v-card-text>
       </v-card>
     </v-flex>
       <v-flex xs6>
-        <v-card  color="success">
-          <v-card-text class="px-0">6</v-card-text>
+        <v-card  >
+          <v-card-text class="px-0">
+            <update-menu-form v-if="menu" :updateMenu="menu"></update-menu-form>
+          </v-card-text>
         </v-card>
       </v-flex>
     </v-layout>
@@ -16,11 +25,33 @@
 </template>
 
 <script>
+
+  import UpdateMenuForm from './UpdateMenuForm'
+
     export default {
       name: "Menu",
-      data: () => ({
+      components: {UpdateMenuForm},
 
-      })
+      data: () => ({
+        treeItems: [],
+        menuId: null,
+        items: [],
+        menu: null
+      }),
+      created(){
+        this.http.get("/sys/menu/list")
+          .then(res=>{
+            this.items = res.data;
+            this.treeItems = this.$Util.buildMenuTree(res.data);
+          });
+      },
+      watch: {
+        menuId: {
+          handler(){
+            this.menu = this.items.find(x=> x.menuId== this.menuId);
+          }
+        }
+      }
     }
 </script>
 

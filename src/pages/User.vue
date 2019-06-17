@@ -125,7 +125,7 @@
             <td class="text-xs-center">{{ props.item.username }}</td>
             <td class="text-xs-center">{{ props.item.email }}</td>
             <td class="text-xs-center">{{ props.item.mobile }}</td>
-            <td class="text-xs-center">{{ props.item.status }}</td>
+            <td class="text-xs-center">{{ props.item.status?'启用':'停用'}}</td>
             <td class="text-xs-center">{{ props.item.createTime }}</td>
             <td class="text-xs-center"><v-btn color="cyan" style="color: white" @click.stop="displayUpdateUser(props.item)">更新</v-btn></td>
           </tr>
@@ -235,7 +235,6 @@
       closeWindow(){
         this.updateShow = false;
         this.show = false;
-        this.updateRoleId = null;
       },
       delUser(){
        if (!this.selected || this.selected.length == 0){

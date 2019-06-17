@@ -1,7 +1,7 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <v-app>
 
-    <v-btn color="success" @click="testCommon">测试全局方法</v-btn>
+    <v-btn color="success" @click="testCommon">测试线程池保存</v-btn>
 
     <v-container fluid>
       <v-layout row wrap align-center>
@@ -391,8 +391,7 @@
     }),
     methods: {
       testCommon(){
-        // alert(123);
-        this.$Util.alertMst('abc');
+        this.http.get('/sys/menu/sing-thread/test')
       }
     }
   }
