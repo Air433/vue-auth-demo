@@ -16,7 +16,7 @@
       <v-flex xs6>
         <v-card  >
           <v-card-text class="px-0">
-            <update-menu-form v-if="menu" :updateMenu="menu"></update-menu-form>
+            <update-menu-form v-if="menu" :updateMenu="menu" :treeItems="treeItems"></update-menu-form>
           </v-card-text>
         </v-card>
       </v-flex>
