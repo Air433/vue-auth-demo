@@ -31,6 +31,38 @@
         ></v-text-field>
 
 
+        <v-text-field
+          v-model="perms"
+          :counter="500"
+          label="授权标识"
+          v-if="menuType ==1 || menuType==2"
+        ></v-text-field>
+
+        <v-layout v-if="menuType ==1" row wrap>
+          <v-flex xs1>
+            <v-text-field
+              v-model="slider"
+              class="mt-0"
+              hide-details
+              single-line
+              type="number"
+            ></v-text-field>
+          </v-flex>
+          <v-flex xs11>
+            <v-slider
+              v-model="slider"
+              thumb-label="always"
+            ></v-slider>
+          </v-flex>
+
+        </v-layout>
+
+        <v-text-field
+          v-model="url"
+          :counter="500"
+          label="菜单路由"
+          v-if="menuType ==1"
+        ></v-text-field>
 
         <v-dialog max-width="800" v-model="chooseMenuShow" persistent scrollable>
           <v-card>
@@ -50,6 +82,7 @@
           </v-card>
         </v-dialog>
 
+        <v-btn color="success" @click="updateMenuFunc">保存</v-btn>
       </v-form>
     </v-card>
   </v-app>
@@ -73,13 +106,20 @@
         type: Array,
         default: []
       },
+      findMenuList: {
+        type: Function
+      }
     },
     data(){
       return {
         menuName: '',
         menuType: null,
         chooseMenuShow: false,
-        parentMenuId: null
+        parentMenuId: null,
+        perms: null,
+        slider: 0,
+        url: null,
+        menuId: null
       }
     },
     methods: {
@@ -92,16 +132,38 @@
       updateParentMenuId(parentMenu){
         this.parentMenuId = parentMenu.id;
         this.parentName = parentMenu.name;
+      },
+      updateMenuFunc(){
+        let dto = {menuId: this.menuId, name: this.menuName, orderNum: this.slider, parentId: this.parentMenuId,
+        perms: this.perms, url: this.url, type: parseInt(this.menuType)};
+
+        this.http.put('/sys/menu/update', dto)
+          .then(res=>{
+            if (res.data.status==200){
+              this.$message.success('保存成功');
+              this.findMenuList();
+            }else if(res.data.status==500){
+              this.$message.error("保存失败");
+            }else {
+              this.$message.error("保存失败:"+res.data.msg);
+            }
+          }).catch(error=>{
+          this.$message.error("保存失败:"+error.data.msg);
+        })
       }
     },
     watch: {
       updateMenu: {
         deep: true,
         handler(){
+          this.menuId = this.updateMenu.menuId;
           this.menuName = this.updateMenu.name;
           this.menuType = this.updateMenu.type.toString();
           this.parentName = this.updateMenu.parentName;
           this.parentMenuId = this.updateMenu.parentId;
+          this.perms = this.updateMenu.perms;
+          this.slider = this.updateMenu.orderNum;
+          this.url = this.updateMenu.url;
         }
       }
     }
