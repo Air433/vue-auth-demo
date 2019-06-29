@@ -1,9 +1,8 @@
 <template>
   <v-app>
     <v-card>
-      <!--对话框的标题-->
       <v-toolbar dense dark color="primary">
-        <v-toolbar-title>菜单信息</v-toolbar-title>
+        <v-toolbar-title>新建菜单</v-toolbar-title>
         <v-spacer/>
         <!--关闭窗口的按钮-->
         <v-btn icon @click="changeMenuForm">
@@ -14,9 +13,9 @@
       <v-form>
 
         <v-radio-group v-model="menuType" row>
-          <v-radio label="目录" value="0"  :disabled="canUpdate"></v-radio>
-          <v-radio label="菜单" value="1"  :disabled="canUpdate"></v-radio>
-          <v-radio label="按钮" value="2"  :disabled="canUpdate"></v-radio>
+          <v-radio label="目录" value="0"></v-radio>
+          <v-radio label="菜单" value="1"></v-radio>
+          <v-radio label="按钮" value="2"></v-radio>
         </v-radio-group>
 
 
@@ -25,7 +24,6 @@
           :counter="50"
           label="菜单名称"
           required
-          :disabled="canUpdate"
         ></v-text-field>
 
         <v-text-field
@@ -34,7 +32,6 @@
           label="上级菜单"
           required
           @click="showChooseMenu"
-          :disabled="canUpdate"
         ></v-text-field>
 
 
@@ -43,7 +40,6 @@
           :counter="500"
           label="授权标识"
           v-if="menuType ==1 || menuType==2"
-          :disabled="canUpdate"
         ></v-text-field>
 
         <v-layout v-if="menuType ==1" row wrap>
@@ -54,14 +50,12 @@
               hide-details
               single-line
               type="number"
-              :disabled="canUpdate"
             ></v-text-field>
           </v-flex>
           <v-flex xs11>
             <v-slider
               v-model="slider"
               thumb-label="always"
-              :disabled="canUpdate"
             ></v-slider>
           </v-flex>
 
@@ -72,7 +66,6 @@
           :counter="500"
           label="菜单路由"
           v-if="menuType ==1"
-          :disabled="canUpdate"
         ></v-text-field>
 
         <v-dialog max-width="800" v-model="chooseMenuShow" persistent scrollable>
@@ -88,12 +81,15 @@
             </v-toolbar>
             <!--对话框的内容，表单-->
             <v-card-text class="px-5" style="height:800px">
-              <choose-menu-dialog  :closeWindow="closeWindow" :treeItems="treeItems" :menus="[updateMenu]" :updateParentMenuId="updateParentMenuId"></choose-menu-dialog>
+              <choose-menu-dialog :closeWindow="closeWindow" :treeItems="treeItems" :menus="[updateMenu]"
+                                  :updateParentMenuId="updateParentMenuId">
+
+              </choose-menu-dialog>
             </v-card-text>
           </v-card>
         </v-dialog>
 
-        <v-btn color="success" @click="updateMenuFunc"  :disabled="canUpdate">保存</v-btn>
+        <v-btn color="success" @click="saveMenu">保存</v-btn>
       </v-form>
     </v-card>
   </v-app>
@@ -104,14 +100,11 @@
   import ChooseMenuDialog from './ChooseMenuDialog'
 
   export default {
-    name: "update-menu-form",
-    components: {
-      ChooseMenuDialog
-    },
+    name: "new-menu-form",
+    components: {ChooseMenuDialog},
     props: {
-      updateMenu: {
-        type: Object,
-        default: {}
+      changeMenuForm: {
+        type: Function
       },
       treeItems: {
         type: Array,
@@ -119,16 +112,9 @@
       },
       findMenuList: {
         type: Function
-      },
-      canUpdate: {
-        type: String,
-        default: 'false'
-      },
-      changeMenuForm: {
-        type: Function
       }
     },
-    data(){
+    data() {
       return {
         menuName: '',
         menuType: null,
@@ -151,38 +137,26 @@
         this.parentMenuId = parentMenu.id;
         this.parentName = parentMenu.name;
       },
-      updateMenuFunc(){
-        let dto = {menuId: this.menuId, name: this.menuName, orderNum: this.slider, parentId: this.parentMenuId,
-        perms: this.perms, url: this.url, type: parseInt(this.menuType)};
+      saveMenu(){
+        let saveDTO = {parentId: this.parentMenuId, name: this.menuName, url: this.url, perms: this.perms,
+        type: parseInt(this.menuType),orderNum: this.slider};
 
-        this.http.put('/sys/menu/update', dto)
+        this.http.postJson('/sys/menu/save', saveDTO)
           .then(res=>{
-            if (res.data.status==200){
-              this.$message.success('保存成功');
+            if (res.data.status == 200){
+              this.$message.success("保存成功");
               this.findMenuList();
-            }else if(res.data.status==500){
-              this.$message.error("保存失败");
             }else {
-              this.$message.error("保存失败:"+res.data.msg);
+              if (res.data.msg) {
+                this.$message.error("保存失败:"+res.data.msg);
+              }else{
+                this.$message.error("保存失败");
+              }
+
             }
           }).catch(error=>{
-          this.$message.error("保存失败:"+error.data.msg);
+          this.$message.error("保存失败")
         })
-      }
-    },
-    watch: {
-      updateMenu: {
-        deep: true,
-        handler(){
-          this.menuId = this.updateMenu.menuId;
-          this.menuName = this.updateMenu.name;
-          this.menuType = this.updateMenu.type.toString();
-          this.parentName = this.updateMenu.parentName;
-          this.parentMenuId = this.updateMenu.parentId;
-          this.perms = this.updateMenu.perms;
-          this.slider = this.updateMenu.orderNum;
-          this.url = this.updateMenu.url;
-        }
       }
     }
   }

@@ -2,7 +2,7 @@
   <v-app>
     <v-layout row wrap>
       <v-flex xs6>
-        <v-card >
+        <v-card>
           <v-card-text class="px-0">
             <v-treeview
               :items="treeItems"
@@ -16,17 +16,17 @@
       </v-flex>
       <v-flex xs6>
 
-            <v-text-field
-              label="Solo"
-              :placeholder="menuName"
-              solo
-              disabled="true"
-            ></v-text-field>
+        <v-text-field
+          label="Solo"
+          :placeholder="menuName"
+          solo
+          disabled="true"
+        ></v-text-field>
 
       </v-flex>
 
       <v-flex xs6>
-          <v-btn color="success" @click="confirmMenu">确定</v-btn>
+        <v-btn color="success" @click="confirmMenu">确定</v-btn>
       </v-flex>
       <v-flex xs6>
         <v-btn color="info" @click="closeWindow">取消</v-btn>
@@ -55,16 +55,16 @@
       }
     },
     data: () => ({
-      chooseMenus:[],
+      chooseMenus: [],
       parentMenuId: null,
       menuName: '',
       menuId: null
     }),
     methods: {
-      closeWindow(){
+      closeWindow() {
         this.show = false;
       },
-      confirmMenu(){
+      confirmMenu() {
         this.updateParentMenuId(this.chooseMenus[0]);
         this.closeWindow();
       }
@@ -72,15 +72,18 @@
     watch: {
       menus: {
         deep: true,
-        handler(){
-          this.parentMenuId = this.menus[0].parentId;
-          this.menuName = this.menus[0].parentName;
-          this.menuId = this.menus[0].parentId;
+        handler() {
+          if (this.menus[0]) {
+            this.parentMenuId = this.menus[0].parentId;
+            this.menuName = this.menus[0].parentName;
+            this.menuId = this.menus[0].parentId;
+          }
+
         }
       },
       chooseMenus: {
         deep: true,
-        handler(){
+        handler() {
           this.menuName = this.chooseMenus[0].name;
           this.menuId = this.chooseMenus[0].id;
         }
